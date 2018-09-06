@@ -9,7 +9,6 @@ import (
 	"time"
 )
 
-
 // ErrServiceAlreadyRanOnce tells us that the service already ran and you cannot run it again, if you need to run it again you need to create a new objecct
 const ErrServiceAlreadyRanOnce = "service already ran once, cannot run again"
 
