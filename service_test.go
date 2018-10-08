@@ -138,8 +138,9 @@ func Test_Service_WaitAndHandlers(t *testing.T) {
 	assert.NotNil(t, dummyClientFailStop)
 	assert.False(t, dummyClientFailStop.isRunning.Load())
 
+	ver := ssw.NewVersion("name", "desc", "ver", "hash", "date", "clean")
 	svc := ssw.WithLogger(
-		ssw.New("test", cfg, ssw.NewVersion("name", "desc", "ver", "hash", "date", "clean"), dummyClientOK, dummyClientFailStart, dummyClientFailStop),
+		ssw.New("test", cfg, ver, dummyClientOK, dummyClientFailStart, dummyClientFailStop),
 		zap.NewNop(),
 	)
 	svc.HandleStart = func() error {
@@ -209,7 +210,7 @@ func Test_Service_WaitAndHandlers(t *testing.T) {
 func ExampleNew() {
 
 	cfg := ssw.NewConfig()
-	version :=  ssw.NewVersion("Test", "Desc", "Ver", "Hash", "Date", "Clean")
+	version := ssw.NewVersion("Test", "Desc", "Ver", "Hash", "Date", "Clean")
 	svc := ssw.WithLogger(
 		ssw.New("Test", cfg, version),
 		zap.NewNop(),

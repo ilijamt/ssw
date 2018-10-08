@@ -71,7 +71,7 @@ func (o *Service) Run() (err error) {
 	log(o.logger, logInfo, "Service started", zap.String("name", o.name))
 	defer log(o.logger, logInfo, "Service stopped", zap.String("name", o.name))
 	if o.config.DelayStart > 0 {
-		log(o.logger, logWarn, "Delaying start", zap.String("delay", o.config.DelayStart.String()))
+		log(o.logger, logInfo, "Delaying start", zap.String("delay", o.config.DelayStart.String()))
 		time.Sleep(o.config.DelayStart)
 	}
 
@@ -84,7 +84,7 @@ func (o *Service) Run() (err error) {
 
 	defer func() {
 		delay := time.Duration(o.config.Timeout) * time.Millisecond
-		log(o.logger, logWarn, "Delaying shutdown", zap.Duration("delay", delay))
+		log(o.logger, logInfo, "Delaying shutdown", zap.Duration("delay", delay))
 		time.Sleep(delay)
 	}()
 
@@ -127,7 +127,7 @@ func (o *Service) Run() (err error) {
 
 		// if there are no signals we don't need to do this
 		if noSignals {
-			log(o.logger, logWarn, "No operating system signals available to bind to")
+			log(o.logger, logInfo, "No operating system signals available to bind to")
 			return
 		}
 
