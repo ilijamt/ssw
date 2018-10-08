@@ -209,9 +209,9 @@ func Test_Service_WaitAndHandlers(t *testing.T) {
 func ExampleNew() {
 
 	cfg := ssw.NewConfig()
-
+	version :=  ssw.NewVersion("Test", "Desc", "Ver", "Hash", "Date", "Clean")
 	svc := ssw.WithLogger(
-		ssw.New("Test", cfg, ssw.NewVersion("Test", "Desc", "Ver", "Hash", "Date", "Clean")),
+		ssw.New("Test", cfg, version),
 		zap.NewNop(),
 	)
 
