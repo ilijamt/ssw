@@ -19,11 +19,15 @@ import (
 	"os"
 	"syscall"
 	"github.com/ilijamt/ssw"
+	"go.uber.org/zap"
 )
 
 func main() {
 
-	svc := ssw.New("Test", ssw.NewConfig(), ssw.NewVersion("Test", "Desc", "Ver", "Hash", "Date", "Clean"))
+	svc := ssw.WithLogger(
+		ssw.New("Test", ssw.NewConfig(), ssw.NewVersion("Test", "Desc", "Ver", "Hash", "Date", "Clean")),
+		zap.NewNop(),
+	)
 
 	svc.HandleStart = func() error {
 		fmt.Println("Handle start")

@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:e361cb646a33874cf6521b5c4e77c9208b4b58c7fd3893b8c87f61f49b19d991"
+  digest = "1:88f504c9e9517cd6ec7bd103c3331fa245307ccaeb92f900cfb0c727b6e872d4"
   name = "github.com/caarlos0/env"
   packages = ["."]
   pruneopts = "UT"
-  revision = "1cddc31c48c56ecd700d873edb9fd5b6f5df922a"
-  version = "v3.3.0"
+  revision = "7f73d6597823c7a0c39edd46e1998f90692b2add"
+  version = "v3.4.0"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -65,6 +65,29 @@
   revision = "1ea20fb1cbb1cc08cbd0d913a96dead89aa18289"
   version = "v1.3.2"
 
+[[projects]]
+  digest = "1:60bf2a5e347af463c42ed31a493d817f8a72f102543060ed992754e689805d1a"
+  name = "go.uber.org/multierr"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
+  version = "v1.1.0"
+
+[[projects]]
+  digest = "1:c52caf7bd44f92e54627a31b85baf06a68333a196b3d8d241480a774733dcf8b"
+  name = "go.uber.org/zap"
+  packages = [
+    ".",
+    "buffer",
+    "internal/bufferpool",
+    "internal/color",
+    "internal/exit",
+    "zapcore",
+  ]
+  pruneopts = "UT"
+  revision = "ff33455a0e382e8a81d14dd7c922020b6b5e7982"
+  version = "v1.9.1"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -75,6 +98,7 @@
     "github.com/pkg/errors",
     "github.com/stretchr/testify/assert",
     "go.uber.org/atomic",
+    "go.uber.org/zap",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

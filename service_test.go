@@ -7,6 +7,7 @@ import (
 	"github.com/ilijamt/ssw"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/atomic"
+	"go.uber.org/zap"
 	"os"
 	"syscall"
 	"testing"
@@ -59,7 +60,11 @@ func (o *dummyClient) Stop() error {
 func Test_NewService(t *testing.T) {
 	cfg := ssw.NewConfig()
 	version := ssw.NewVersion("name", "desc", "ver", "hash", "date", "clean")
-	svc := ssw.New("test", cfg, version)
+	svc := ssw.WithLogger(
+		ssw.New("test", cfg, version),
+		nil,
+	)
+
 	assert.NotEmpty(t, version.GetDetails())
 	assert.NotEmpty(t, version.GetVersion())
 	assert.NotNil(t, svc)
@@ -73,7 +78,10 @@ func Test_NewService(t *testing.T) {
 func Test_NewServiceFailToStart(t *testing.T) {
 	cfg := ssw.NewConfig()
 	version := ssw.NewVersion("name", "desc", "ver", "hash", "date", "clean")
-	svc := ssw.New("test", cfg, version)
+	svc := ssw.WithLogger(
+		ssw.New("test", cfg, version),
+		zap.NewNop(),
+	)
 	svc.HandleStart = func() error {
 		return errors.New("fail to start")
 	}
@@ -89,7 +97,10 @@ func Test_NewServiceFailToStart(t *testing.T) {
 func Test_NewServiceFailToStop(t *testing.T) {
 	cfg := ssw.NewConfig()
 	version := ssw.NewVersion("name", "desc", "ver", "hash", "date", "clean")
-	svc := ssw.New("test", cfg, version)
+	svc := ssw.WithLogger(
+		ssw.New("test", cfg, version),
+		zap.NewNop(),
+	)
 	svc.HandleStop = func() error {
 		return errors.New("fail to stop")
 	}
@@ -127,7 +138,10 @@ func Test_Service_WaitAndHandlers(t *testing.T) {
 	assert.NotNil(t, dummyClientFailStop)
 	assert.False(t, dummyClientFailStop.isRunning.Load())
 
-	svc := ssw.New("test", cfg, ssw.NewVersion("name", "desc", "ver", "hash", "date", "clean"), dummyClientOK, dummyClientFailStart, dummyClientFailStop)
+	svc := ssw.WithLogger(
+		ssw.New("test", cfg, ssw.NewVersion("name", "desc", "ver", "hash", "date", "clean"), dummyClientOK, dummyClientFailStart, dummyClientFailStop),
+		zap.NewNop(),
+	)
 	svc.HandleStart = func() error {
 		handlerStart = true
 		return nil
@@ -165,7 +179,7 @@ func Test_Service_WaitAndHandlers(t *testing.T) {
 
 	// verify we have stopped
 	go func() {
-		assert.NoError(t, svc.Run())
+		assert.NoError(t, svc.Start())
 		assert.False(t, dummyClientOK.isRunning.Load())
 		assert.False(t, dummyClientFailStart.isRunning.Load())
 		assert.True(t, dummyClientFailStop.isRunning.Load())
@@ -185,7 +199,7 @@ func Test_Service_WaitAndHandlers(t *testing.T) {
 	})
 
 	time.AfterFunc(5*time.Second, func() {
-		svc.Close()
+		svc.Stop()
 	})
 
 	<-done
@@ -195,7 +209,11 @@ func Test_Service_WaitAndHandlers(t *testing.T) {
 func ExampleNew() {
 
 	cfg := ssw.NewConfig()
-	svc := ssw.New("Test", cfg, ssw.NewVersion("Test", "Desc", "Ver", "Hash", "Date", "Clean"))
+
+	svc := ssw.WithLogger(
+		ssw.New("Test", cfg, ssw.NewVersion("Test", "Desc", "Ver", "Hash", "Date", "Clean")),
+		zap.NewNop(),
+	)
 
 	svc.HandleStart = func() error {
 		fmt.Println("Handle start")
